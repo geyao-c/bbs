@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BbsApplication {
 
     public static void main(String[] args) {
+        //托尔斯泰
         SpringApplication.run(BbsApplication.class, args);
     }
 
