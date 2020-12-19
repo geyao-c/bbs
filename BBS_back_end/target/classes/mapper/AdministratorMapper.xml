@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnu.bbs.dao.AdministratorMapper">
+
+  <resultMap id="BaseResultMap" type="com.hnu.bbs.entity.Administrator">
+    <id column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="login_passwd" jdbcType="VARCHAR" property="loginPasswd" />
+  </resultMap>
+
+<!--  void insert(Administrator record);-->
+  <insert id="insert" parameterType="com.hnu.bbs.entity.Administrator" >
+    insert into administrator ( login_name, login_passwd
+      )
+    values ( #{loginName,jdbcType=VARCHAR}, #{login_passwd,jdbcType=VARCHAR}
+      )
+  </insert>
+
+<!--  void deleteById(Integer id);-->
+  <delete id="deleteById" parameterType="java.lang.Integer">
+
+    delete from administrator
+    where admin_id = #{id,jdbcType=INTEGER}
+
+  </delete>
+
+<!--  List<Administrator> selectAll();-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select admin_id, login_name, login_passwd
+    from administrator
+
+  </select>
+
+<!--  Administrator selectByLoginName(String loginName);-->
+  <select id="selectByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select admin_id, login_name, login_passwd
+    from administrator
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </select>
+
+<!--      int updatePasswdByName(Administrator administrator);-->
+  <update id="updatePasswdByName" parameterType="com.hnu.bbs.entity.Administrator" >
+    update administrator
+    set
+      admin_id = #{adminId,jdbcType=INTEGER},
+      login_name = #{loginName,jdbcType=VARCHAR},
+      login_passwd = #{loginPasswd,jdbcType=VARCHAR}
+    where login_name = #{loginName,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

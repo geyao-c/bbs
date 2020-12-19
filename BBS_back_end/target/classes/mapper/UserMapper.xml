@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnu.bbs.dao.UserMapper">
+
+  <resultMap id="BaseResultMap" type="com.hnu.bbs.entity.User">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_gender" jdbcType="INTEGER" property="userGender" />
+    <result column="user_fans" jdbcType="INTEGER" property="userFans" />
+    <result column="user_selfinfo" jdbcType="VARCHAR" property="userSelfinfo" />
+    <result column="user_face" jdbcType="VARCHAR" property="userFace" />
+    <result column="user_concern" jdbcType="INTEGER" property="userConcern" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+  </resultMap>
+
+    <parameterMap id="map" type="java.util.Map">
+        <parameter property="currIndex" jdbcType="INTEGER"/>
+        <parameter property="pageSize" jdbcType="INTEGER"/>
+    </parameterMap>
+
+<!--  int insert(User user);-->
+  <insert id="insert" parameterType="com.hnu.bbs.entity.User">
+    insert into user ( user_name, user_password,
+                       user_gender, user_fans, user_selfinfo,
+                       user_face, user_concern, nick_name)
+    values ( #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
+             #{userGender,jdbcType=INTEGER}, #{userFans,jdbcType=INTEGER}, #{userSelfinfo,jdbcType=VARCHAR},
+             #{userFace,jdbcType=VARCHAR}, #{userConcern,jdbcType=INTEGER},#{nickName,jdbcType=VARCHAR})
+  </insert>
+
+
+<!--  String selectPasswordByUserName(String UserName);-->
+  <select id="selectPasswordByUserName" parameterType="java.lang.String" resultType="java.lang.String">
+    select user_password
+    from user
+    where user_name=#{userName,jdbcType=VARCHAR}
+  </select>
+
+
+<!--  List<User> selectAll();-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from user
+
+  </select>
+
+<!--  int updateUserInformation(User user);-->
+  <update id="updateUserInformation" parameterType="com.hnu.bbs.entity.User">
+    update user set
+        user_face=#{userFace,jdbcType=VARCHAR},
+        user_gender=#{userGender,jdbcType=INTEGER},
+        nick_name=#{nickName,jdbcType=VARCHAR},
+        user_selfinfo=#{userSelfinfo,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updatePassword(User user);-->
+  <update id="updatePassword" parameterType="com.hnu.bbs.entity.User">
+    update user set
+      user_password=#{userPassword,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateNickName(User user);-->
+  <update id="updateNickName" parameterType="com.hnu.bbs.entity.User">
+    update user set
+      nick_name=#{nickName,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateGender(User user);-->
+  <update id="updateGender" parameterType="com.hnu.bbs.entity.User">
+    update user set
+      user_gender=#{userGender,jdbcType=INTEGER}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateSelfInfo(User user);-->
+  <update id="updateSelfInfo" parameterType="com.hnu.bbs.entity.User">
+    update user set
+      user_selfinfo=#{userSelfinfo,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateFansNum(User user);-->
+  <update id="updateFansNum" parameterType="com.hnu.bbs.entity.User">
+    update user set
+      user_fans=#{userFans,jdbcType=INTEGER}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateUserFace(User user);-->
+  <update id="updateUserFace" parameterType="com.hnu.bbs.entity.User">
+    update user set
+      user_face=#{userFace,jdbcType=VARCHAR}
+    where user_id=#{userId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  User selectUserById(Integer userId);-->
+  <select id="selectUserById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from user
+    where user_id=#{userId,jdbcType=INTEGER}
+  </select>
+
+
+<!--  User selectUserByUserName(String userName);-->
+  <select id="selectUserByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from user
+    where user_name=#{userName,jdbcType=VARCHAR}
+  </select>
+
+
+<!--    int deleteUserById(Integer userId);-->
+    <delete id="deleteUserById" parameterType="java.lang.Integer">
+        delete from user
+        where user_id=#{userId,jdbcType=INTEGER}
+    </delete>
+
+
+<!--    List<User> selectByCurPageAndPageSize(Map<String,Object> data);  -->
+    <select id="selectByCurPageAndPageSize" parameterMap="map" resultMap="BaseResultMap">
+        select *
+        from user
+        limit #{currIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+
+<!--    Integer selectCountOfAll();     -->
+<select id="selectCountOfAll" resultType="java.lang.Integer">
+    select count(*)
+    from user
+</select>
+
+</mapper>

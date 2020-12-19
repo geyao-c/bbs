@@ -1,0 +1,98 @@
+<!--
+ * @Author: 姬小野
+ * @Date: 2020-12-18 22:16:03
+ * @LastEditTime: 2020-12-19 20:25:49
+ * @LastEditors: 姬小野
+ * @Description: 
+ * @FilePath: \BBS_front_end\publish.html
+ * @Hello, World!
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>文章编辑</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+    <link href="./css/markdown.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script>
+        //markdown格式转换
+        function mdSwitch() {
+            var mdValue = document.getElementById("md-area").value;
+            var converter = new showdown.Converter();
+            var html = converter.makeHtml(mdValue);
+            document.getElementById("show-area").innerHTML = html;
+        }
+
+
+        //发布文章函数
+        $(document).ready(function() {
+            //用于获取前一个页面传递过来的userName
+            var userId = window.localStorage.getItem("userId");
+            // var userId = "123"
+            var userName = window.localStorage.getItem("userName");
+
+
+            $("#btn_pulish").click(function() {
+                var title = $("#title").val();
+                var content = $("#md-area").val();
+
+                if (title === "" || content === "" || userId === null) {
+                    alert("文章和标题不能为空");
+                } else {
+                    $.ajax({
+                        url: "http://localhost:8080/article/addArticle",
+                        data: {
+                            content: content,
+                            title: title,
+                            userId: userId
+                        },
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success) {
+                                alert("发布成功.");
+                                var url = "./index.html?userName=" + userName;
+                                url = encodeURI(url);
+                                window.location.href = url;
+                            } else {
+                                alert("发布失败.");
+                            }
+                        }
+                    });
+                }
+            });
+
+
+
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class="slogan">文章编辑区</div>
+    <div>
+        <input class="title" required="required" id="title" maxlength="22" size="25" type="text" placeholder="文章标题">
+    </div>
+
+    <div id="area">
+        <table>
+            <tr>
+                <td><textarea id="md-area" onkeyup=mdSwitch() placeholder="文章内容(支持markdown语法)" style="height: 1000px"></textarea></td>
+                <td>
+                    <div id="show-area" class="clearfix" style="height: 1000px">效果预览区</div>
+                </td>
+            </tr>
+            <tr>
+                <button id="btn_pulish" class="btn-danger">
+                    发布
+                </button>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

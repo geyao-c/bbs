@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>用户信息界面</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="./css/detail.css" rel="stylesheet">
+    <script>
+        $(document).ready(function() {
+            var url = decodeURI(window.location.href);
+            var argsIndex = url.split("?authorId=");
+            var authorId = argsIndex[1];
+            var userId = window.localStorage.getItem("userId");
+            var followOrNot;
+
+
+            //获取作者信息
+            $.ajax({
+                url: "http://localhost:8080/user/queryUserById",
+                data: {
+                    userId: authorId
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.user.userGender == 0) {
+                        $("#userGender").html("女");
+                    } else {
+                        $("#userGender").html("男");
+                    }
+                    console.log(data.user);
+                    $("#userSelfinfo").html(data.user.userSelfinfo);
+                    $("#userFace").attr("src", data.user.userFace);
+                    $("#userFans").html(data.user.userFans);
+                    $("#userNickName").html(data.user.nickName);
+
+                }
+            });
+
+            //查询是否已有关注关系
+            $.ajax({
+                url: "http://localhost:8080/attention/queryAttetionOrNot",
+                data: {
+                    userId: userId,
+                    authorId: authorId
+                },
+                type: "GET",
+                dataType: "json",
+                async: false,
+                success: function(data) {
+                    if (data.attention)
+                        followOrNot = true;
+                    else
+                        followOrNot = false;
+
+                }
+            });
+
+            console.log(followOrNot);
+
+            if (!followOrNot)
+                $("#follow").show();
+            else
+                $("#unfollow").show();
+
+            //为关注按钮绑定函数
+            $("#follow").click(function() {
+                $.ajax({
+                    url: "http://localhost:8080/attention/addAttention",
+                    data: {
+                        userId: userId,
+                        authorId: authorId
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+                            alert("关注成功");
+                            var url = "./index.html?";
+                            url = encodeURI(url);
+                            window.location.href = url;
+                        } else {
+                            alert("关注失败");
+                        }
+
+                    }
+                });
+            });
+
+
+            //为取消关注按钮绑定函数
+            $("#unfollow").click(function() {
+                $.ajax({
+                    url: "http://localhost:8080/attention/deleteByUserIdAndAuthorId",
+                    data: {
+                        userId: userId,
+                        authorId: authorId
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+                            alert("取消关注成功");
+                            var url = "./index.html?";
+                            url = encodeURI(url);
+                            window.location.href = url;
+                        } else {
+                            alert("取消关注失败");
+                        }
+
+                    }
+                });
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="signupform">
+        <h1></h1>
+        <div class="container">
+
+            <div class="agile_info">
+
+                <div class="w3l_form">
+                    <div class="left_grid_info">
+                        <h3>作者头像</h3>
+                        <div>
+                            <img id="userFace" src="" height="230" width="50"></img>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w3_info">
+                    <h2>作者信息</h2>
+                    <P>
+                    </P>
+                    性别:
+                    <p id="userGender"></p>
+                    自我简介:
+                    <p id="userSelfinfo"></p>
+                    粉丝数:
+                    <p id="userFans"></p>
+                    昵称:
+                    <p id="userNickName"></p>
+                    <button id="follow" class="btn btn-danger btn-block" style="display: none">关注该用户</button>
+
+                    <button id="unfollow" class="btn btn-danger2 btn-block" style="display: none">取消关注该用户</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

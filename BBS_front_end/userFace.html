@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title> 用户头像</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var url = decodeURI(window.location.href);
+            var userName = url.split("&userName=")[1];
+            var argsIndex = (url.split("&userName=")[0]).split("?userId=");
+            var userId = argsIndex[1];
+            var temp = [];
+            for (var i = 1; i <= 50; i++) {
+                temp[i] = "#userFace" + i;
+                $(temp[i]).click(function() {
+                    $.ajax({
+                        url: "http://localhost:8080/user/modifyUserFace",
+                        data: {
+                            userId: userId,
+                            newUserFace: $(this).attr("src"),
+                        },
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success === true)
+                                alert("修改成功");
+                            var url = "./editUserDetail.html?userName=" + userName;
+                            url = encodeURI(url);
+                            window.location.href = url;
+                        }
+                    })
+                });
+            }
+
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <img id="userFace1" src="http://localhost/images/1.jpg" height="100" width="100"></img>
+    <img id="userFace2" src="http://localhost/images/2.jpg" height="100" width="100"></img>
+    <img id="userFace3" src="http://localhost/images/3.jpg" height="100" width="100"></img>
+    <img id="userFace4" src="http://localhost/images/4.jpg" height="100" width="100"></img>
+    <img id="userFace5" src="http://localhost/images/5.jpg" height="100" width="100"></img>
+    <img id="userFace6" src="http://localhost/images/6.jpg" height="100" width="100"></img>
+    <img id="userFace7" src="http://localhost/images/7.jpg" height="100" width="100"></img>
+    <img id="userFace8" src="http://localhost/images/8.jpg" height="100" width="100"></img>
+    <img id="userFace9" src="http://localhost/images/9.jpg" height="100" width="100"></img>
+    <img id="userFace10" src="http://localhost/images/10.jpg" height="100" width="100"></img>
+    <br/>
+    <img id="userFace11" src="http://localhost/images/11.jpg" height="100" width="100"></img>
+    <img id="userFace12" src="http://localhost/images/12.jpg" height="100" width="100"></img>
+    <img id="userFace13" src="http://localhost/images/13.jpg" height="100" width="100"></img>
+    <img id="userFace14" src="http://localhost/images/14.jpg" height="100" width="100"></img>
+    <img id="userFace15" src="http://localhost/images/15.jpg" height="100" width="100"></img>
+    <img id="userFace16" src="http://localhost/images/16.jpg" height="100" width="100"></img>
+    <img id="userFace17" src="http://localhost/images/17.jpg" height="100" width="100"></img>
+    <img id="userFace18" src="http://localhost/images/18.jpg" height="100" width="100"></img>
+    <img id="userFace19" src="http://localhost/images/19.jpg" height="100" width="100"></img>
+    <img id="userFace20" src="http://localhost/images/20.jpg" height="100" width="100"></img>
+    <br/>
+    <img id="userFace21" src="http://localhost/images/21.jpg" height="100" width="100"></img>
+    <img id="userFace22" src="http://localhost/images/22.jpg" height="100" width="100"></img>
+    <img id="userFace23" src="http://localhost/images/23.jpg" height="100" width="100"></img>
+    <img id="userFace24" src="http://localhost/images/24.jpg" height="100" width="100"></img>
+    <img id="userFace25" src="http://localhost/images/25.jpg" height="100" width="100"></img>
+    <img id="userFace26" src="http://localhost/images/26.jpg" height="100" width="100"></img>
+    <img id="userFace27" src="http://localhost/images/27.jpg" height="100" width="100"></img>
+    <img id="userFace28" src="http://localhost/images/28.jpg" height="100" width="100"></img>
+    <img id="userFace29" src="http://localhost/images/29.jpg" height="100" width="100"></img>
+    <img id="userFace30" src="http://localhost/images/30.jpg" height="100" width="100"></img>
+    <br/>
+    <img id="userFace31" src="http://localhost/images/31.jpg" height="100" width="100"></img>
+    <img id="userFace32" src="http://localhost/images/32.jpg" height="100" width="100"></img>
+    <img id="userFace33" src="http://localhost/images/33.jpg" height="100" width="100"></img>
+    <img id="userFace34" src="http://localhost/images/34.jpg" height="100" width="100"></img>
+    <img id="userFace35" src="http://localhost/images/35.jpg" height="100" width="100"></img>
+    <img id="userFace36" src="http://localhost/images/36.jpg" height="100" width="100"></img>
+    <img id="userFace37" src="http://localhost/images/37.jpg" height="100" width="100"></img>
+    <img id="userFace38" src="http://localhost/images/38.jpg" height="100" width="100"></img>
+    <img id="userFace39" src="http://localhost/images/39.jpg" height="100" width="100"></img>
+    <img id="userFace40" src="http://localhost/images/40.jpg" height="100" width="100"></img>
+    <br/>
+    <img id="userFace41" src="http://localhost/images/41.jpg" height="100" width="100"></img>
+    <img id="userFace42" src="http://localhost/images/42.jpg" height="100" width="100"></img>
+    <img id="userFace43" src="http://localhost/images/43.jpg" height="100" width="100"></img>
+    <img id="userFace44" src="http://localhost/images/44.jpg" height="100" width="100"></img>
+    <img id="userFace45" src="http://localhost/images/45.jpg" height="100" width="100"></img>
+    <img id="userFace46" src="http://localhost/images/46.jpg" height="100" width="100"></img>
+    <img id="userFace47" src="http://localhost/images/47.jpg" height="100" width="100"></img>
+    <img id="userFace48" src="http://localhost/images/48.jpg" height="100" width="100"></img>
+    <img id="userFace49" src="http://localhost/images/49.jpg" height="100" width="100"></img>
+    <img id="userFace50" src="http://localhost/images/50.jpg" height="100" width="100"></img>
+    <br/>
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5376a00d-520f-4419-9fa7-b4d57eef0ad8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/BbsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/BbsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/AdministratorController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/AdministratorController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/ArticleCollectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/ArticleCollectionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/AttentionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/AttentionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/HelloController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/dao/AdministratorMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/dao/AdministratorMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/dao/ArticleCollectionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/dao/ArticleCollectionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/dao/ArticleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/dao/ArticleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/dao/AttentionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/dao/AttentionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/dao/CommentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/dao/CommentMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/dao/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/dao/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/Administrator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/Administrator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/Article.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/Article.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/ArticleCollection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/ArticleCollection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/Article_NickName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/Article_NickName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/Attention.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/Attention.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/Comment_NickName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/Comment_NickName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/AdministratorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/AdministratorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/ArticleCollectionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/ArticleCollectionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/AttentionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/AttentionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/impl/AdministratorServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/AdministratorServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/impl/ArticleCollectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/ArticleCollectionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/impl/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/ArticleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/impl/AttentionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/AttentionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/impl/CommentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/CommentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/util/configuration/SwaggerConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/util/configuration/SwaggerConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/util/filter/CrossFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/util/filter/CrossFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/util/generator/Generator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/util/generator/Generator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/scut/bbs/util/generator/config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hnu/bbs/util/generator/config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-deploy.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-deploy.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/AdministratorMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/AdministratorMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/ArticleCollectionMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/ArticleCollectionMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/ArticleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/ArticleMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/AttentionMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/AttentionMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/CommentMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/CommentMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/UserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/UserMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/scut/bbs/BbsApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/hnu/bbs/BbsApplicationTests.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="C:\Users\26220\.m2\wrapper\dists\apache-maven-3.6.0-bin\2dakv70gp803gtm5ve1ufmvttn\apache-maven-3.6.0" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1lpjj9j9fwsM5NYEmpuWWDmck1H" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration name="BbsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="bbs" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.hnu.bbs.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.hnu.bbs.BbsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.BbsApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5376a00d-520f-4419-9fa7-b4d57eef0ad8" name="Default Changelist" comment="" />
+      <created>1608301085518</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1608301085518</updated>
+      <workItem from="1608301085791" duration="7804000" />
+      <workItem from="1608381702142" duration="604000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="361" y="70" width="1089" height="740" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1608381322960">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="70" width="1089" height="740" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381322960" />
+    <state width="1493" height="408" key="GridCell.Tab.0.bottom" timestamp="1608382326434">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326434" />
+    <state width="1493" height="408" key="GridCell.Tab.0.center" timestamp="1608382326434">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.0.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326434" />
+    <state width="1493" height="408" key="GridCell.Tab.0.left" timestamp="1608382326433">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.0.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326433" />
+    <state width="1493" height="408" key="GridCell.Tab.0.right" timestamp="1608382326434">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.0.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326434" />
+    <state width="1493" height="408" key="GridCell.Tab.1.bottom" timestamp="1608382326435">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.1.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326435" />
+    <state width="1493" height="408" key="GridCell.Tab.1.center" timestamp="1608382326434">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.1.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326434" />
+    <state width="1493" height="408" key="GridCell.Tab.1.left" timestamp="1608382326434">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.1.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326434" />
+    <state width="1493" height="408" key="GridCell.Tab.1.right" timestamp="1608382326435">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="408" key="GridCell.Tab.1.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608382326435" />
+    <state width="1493" height="239" key="GridCell.Tab.2.bottom" timestamp="1608381587795">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="239" key="GridCell.Tab.2.bottom/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381587795" />
+    <state width="1493" height="239" key="GridCell.Tab.2.center" timestamp="1608381587795">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="239" key="GridCell.Tab.2.center/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381587795" />
+    <state width="1493" height="239" key="GridCell.Tab.2.left" timestamp="1608381587794">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="239" key="GridCell.Tab.2.left/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381587794" />
+    <state width="1493" height="239" key="GridCell.Tab.2.right" timestamp="1608381587795">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="239" key="GridCell.Tab.2.right/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381587795" />
+    <state x="660" y="294" width="334" height="251" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1608301806019">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="660" y="294" width="334" height="251" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608301806019" />
+    <state x="317" y="133" width="594" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1608304467273">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="317" y="133" width="594" height="598" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608304467273" />
+    <state x="306" y="148" width="924" height="641" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1608379296509">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="306" y="148" width="924" height="641" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608379296509" />
+    <state x="465" y="142" width="602" height="594" key="find.popup" timestamp="1608381565713">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="465" y="142" width="602" height="594" key="find.popup/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381565713" />
+    <state x="561" y="270" key="scopes" timestamp="1608381284879">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="561" y="270" key="scopes/0.0.1536.824/1920.0.1920.1040@0.0.1536.824" timestamp="1608381284879" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/AdministratorController.java</url>
+          <line>22</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/hnu/bbs/controller/ArticleController.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/hnu/bbs/service/impl/ArticleServiceImpl.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/hnu/bbs/BbsApplication.java</url>
+          <line>8</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>文章详情</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
+    <link href="./css/markdown.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function() {
+
+            var url = decodeURI(window.location.href);
+            var argsIndex = url.split("?articleId=");
+            var articleId = argsIndex[1];
+
+            //获取文章信息并渲染文章
+            $.ajax({
+                url: "http://localhost:8080/article/queryByArticleId",
+                data: {
+                    articleId: articleId
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var createTime = data.article.createTime.split("T")[0];
+                    var userId = data.article.userId;
+                    $("#title").html(data.article.title);
+                    $("#time").html("日期：" + createTime);
+
+                    var nickName;
+                    $.get({
+                        url: "http://localhost:8080/user/queryUserById",
+                        data: {
+                            userId: userId
+                        },
+                        success: function(data) {
+                            $("#author").html("作者：" + data.user.nickName);
+                        }
+                    });
+
+                    var converter = new showdown.Converter();
+                    var html = converter.makeHtml(data.article.content);
+                    document.getElementById("show-area").innerHTML = html;
+
+                },
+                error: function(data) {
+                    alert("网络出现故障");
+                }
+            });
+
+
+            //获取评论
+            $.ajax({
+                url: "http://localhost:8080/comment/queryByArticleId",
+                data: {
+                    articleId: articleId
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    var comments = data.comments;
+                    var length = comments.length > 9 ? 9 : comments.length;
+                    for (var i = 1; i <= length; i += 1) {
+                        $("#comment" + i).html(comments[i - 1].nickName + ":\t" + comments[i - 1].content + "\n\t\t\t\t\t\t\t" + comments[i - 1].time.split("T")[0]).show();
+                    }
+
+                }
+            });
+
+
+            //查看是否收藏
+            $.ajax({
+                url: "http://localhost:8080/collection/queryCollectOrNot",
+                data: {
+                    articleId: articleId,
+                    userId: window.localStorage.getItem("userId")
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.collect) {
+                        $("#collect_btn").removeClass().addClass("collect").html("取消收藏");
+                    }
+                }
+
+            });
+
+
+            //为发布评论按钮绑定函数
+            $("#publish_comment").click(function() {
+
+                var content = $("#content").val();
+                if (content.length > 100) {
+                    alert("评论字数不应该超过100");
+                    return;
+                }
+                //上传评论
+                $.ajax({
+                    url: "http://localhost:8080/comment/addComment",
+                    data: {
+                        articleId: articleId,
+                        userId: window.localStorage.getItem("userId"),
+                        content: content
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success)
+                            alert("评论成功");
+                        window.location.href = "./article.html?articleId=" + articleId;
+
+                    }
+                });
+
+            });
+
+
+            //收藏函数
+            $("#collect_btn").click(function() {
+                if ($(this).html() == "收藏")
+                    $.ajax({
+                        url: "http://localhost:8080/collection/addArticleCollection",
+                        data: {
+                            articleId: articleId,
+                            userId: window.localStorage.getItem("userId")
+                        },
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success) {
+                                alert("收藏成功");
+                                window.location.href = "./article.html?articleId=" + articleId;
+                            } else {
+                                alert("收藏失败");
+                            }
+                        }
+                    });
+                else
+                    $.ajax({
+                        url: "http://localhost:8080/collection/removeArticleCollection",
+                        data: {
+                            articleId: articleId,
+                            userId: window.localStorage.getItem("userId")
+                        },
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success) {
+                                alert("取消收藏成功");
+                                window.location.href = "./article.html?articleId=" + articleId;
+                            } else {
+                                alert("取消收藏失败");
+                            }
+                        }
+                    });
+
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+
+    <div id="area" style="width: 70%;float: left;">
+        <div id="title" class="title"></div>
+        <div id="author" class="author"></div>
+        <div id="time" class="time"></div>
+        <button id="collect_btn" class="uncollect">收藏</button>
+        <table>
+            <tr>
+                <td>
+                    <div id="show-area" class="clearfix" style="width: 100%;height: 1000px"></div>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+    <div id="comment" style="font-size: 22px;">最新评论：
+        <div id="comment1" class="comment" hidden></div>
+        <div id="comment2" class="comment" hidden></div>
+        <div id="comment3" class="comment" hidden></div>
+        <div id="comment4" class="comment" hidden></div>
+        <div id="comment5" class="comment" hidden></div>
+        <div id="comment6" class="comment" hidden></div>
+        <div id="comment7" class="comment" hidden></div>
+        <div id="comment8" class="comment" hidden></div>
+        <div id="comment9" class="comment" hidden></div>
+
+        <textarea id="content" rows="3" cols="10" class="comment_text" placeholder="评论区(100字以内)"></textarea>
+        <button id="publish_comment" style="float: right;height: 40px;width: 80px;margin-right: 40px;">提交评论</button>
+    </div>
+</body>
+
+</html>

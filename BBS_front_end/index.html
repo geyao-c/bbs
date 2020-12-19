@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>bbs论坛</title>
+    <link href="./css/index.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            //用于获取前一个页面保存的userName
+            var userName = window.localStorage.getItem("userName");
+            var userInformation;
+            var pagesCount;
+            var curPage = 1;
+
+            if (userName != undefined) {
+                $.ajax({
+                    url: "http://localhost:8080/user/queryUserByUserName",
+                    data: {
+                        userName: userName
+                    },
+                    async: false,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        userInformation = data.user;
+                        window.localStorage.setItem("userId", userInformation.userId);
+                        drawArticles(1, 20);
+
+                    },
+                    error: function() {
+                        alert("请检查您的网络是否畅通");
+                    }
+                });
+                $("#login").show();
+                $("#userFace").attr("src", userInformation.userFace);
+                $("#userName").html(userInformation.nickName == null ? "点击头像修改个人信息" : userInformation.nickName);
+            } else {
+                $("#unlogin").show();
+            }
+
+
+            //查询总页数
+            $.ajax({
+                url: "http://localhost:8080/article/queryArticlesCount",
+                data: {},
+                async: true,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    articlesCount = data.articlesCount;
+                    pagesCount = articlesCount / 20 > parseInt(articlesCount / 20) ? parseInt(articlesCount / 20) + 1 : parseInt(articlesCount / 20);
+                    $("#page").html(curPage + "/" + pagesCount);
+                }
+            });
+
+
+
+            $("#page").html(curPage);
+            $("#prePage").click(function() {
+                if (curPage > 1) {
+                    curPage -= 1;
+                    drawArticles(curPage, 20);
+                    $("#page").html(curPage + "/" + pagesCount);
+                } else {
+                    alert("已经是第1页");
+                }
+            });
+            $("#postPage").click(function() {
+                if (curPage < pagesCount) {
+                    curPage += 1;
+                    drawArticles(curPage, 20);
+                    $("#page").html(curPage + "/" + pagesCount);
+                } else
+                    alert("已经是最后一页");
+            });
+
+
+
+            //请求并渲染指定页面的文章概要
+            function drawArticles(currentPage, pageSize) {
+
+                $.ajax({
+                    url: "http://localhost:8080/article/queryByCurrentPage",
+                    data: {
+                        currentPage: currentPage,
+                        pageSize: pageSize
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        clearPages(20);
+                        var articles = data.articles;
+                        for (var i = 1; i <= articles.length; i++)
+                            drawArticle(i, articles[i - 1]);
+
+                    }
+                });
+
+            }
+
+
+            //渲染指定文章的函数概要
+            function drawArticle(id, article) {
+                var tds = $("#article" + id).find("td");
+                $(tds[0]).find("a").attr("href", "./article.html?articleId=" + article.articleId).html(article.title);
+                $(tds[1]).html(article.likesNum).val(article.articleId).click(like).css("cursor", "pointer");
+                $(tds[2]).html(article.dislikesNum).val(article.articleId).click(diskLike).css("cursor", "pointer");
+                $(tds[3]).find("a").attr("href", "./authorDetail.html?authorId=" + article.userId).html(article.nickName);
+                $(tds[4]).html(((article.likesNum - article.dislikesNum + 1) / (article.likesNum + article.dislikesNum + 15)).toFixed(2));
+                $(tds[5]).find("span").html(article.createTime.split("T")[0]);
+            }
+
+
+            //点赞函数
+            function like() {
+                let that = this;
+
+                var likesNum = parseInt($(this).html());
+                $(this).html(likesNum + 1);
+                $(this).css("color", "green");
+                $(this).unbind("click");
+                $(this).click(cancelLike);
+
+                $.ajax({
+                    url: "http://localhost:8080/article/increaseLikesNum",
+                    data: {
+                        articleId: $(that).val()
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+
+                        } else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+                });
+            }
+
+
+            //取消点赞函数
+            function cancelLike() {
+                let that = this;
+
+                var likesNum = parseInt($(this).html());
+                $(this).html(likesNum - 1);
+                $(this).css("color", "black");
+                $(this).unbind("click");
+                $(this).click(like);
+
+                $.ajax({
+                    url: "http://localhost:8080/article/decreaseLikesNum",
+                    data: {
+                        articleId: $(that).val()
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+
+                        } else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+                });
+            }
+
+
+            //点踩函数
+            function diskLike() {
+                let that = this;
+
+                var likesNum = parseInt($(this).html());
+                $(this).html(likesNum + 1);
+                $(this).css("color", "red");
+                $(this).unbind("click");
+                $(this).click(cancelDisLike);
+
+                $.ajax({
+                    url: "http://localhost:8080/article/increaseDislikesNum",
+                    data: {
+                        articleId: $(this).val()
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {} else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+                });
+            }
+
+            //取消点踩
+            function cancelDisLike() {
+                let that = this;
+
+                var likesNum = parseInt($(this).html());
+                $(this).html(likesNum - 1);
+                $(this).css("color", "black");
+                $(this).unbind("click");
+                $(this).click(diskLike);
+
+                $.ajax({
+                    url: "http://localhost:8080/article/decreaseDislikesNum",
+                    data: {
+                        articleId: $(this).val()
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {} else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+                });
+            }
+
+
+            //为头像绑定点击按钮
+            $("#userFace").click(function() {
+                var url = "./userDetail.html";
+                url = encodeURI(url);
+                window.location.href = url;
+            });
+
+
+
+            //为{我要发贴}按钮绑定事件
+            $("#publish").click(function() {
+                if (userInformation == undefined) alert("请登录");
+                else {
+                    var url = "./publish.html";
+                    url = encodeURI(url);
+                    window.location.href = url;
+                }
+
+            });
+
+            //清空当前页面
+            function clearPages(pages) {
+                for (var id = 1; id <= pages; id++) {
+                    var tds = $("#article" + id).find("td");
+                    $(tds[0]).find("a").html("");
+                    $(tds[1]).html("");
+                    $(tds[2]).html("");
+                    $(tds[3]).find("a").html("");
+                    $(tds[4]).html("");
+                    $(tds[5]).find("span").html("");
+                }
+            }
+
+
+            //为搜索按钮绑定事件
+            $("#btn_search").click(function(event) {
+                var keyWord = $("#keyWord").val();
+                $.ajax({
+                    url: "http://localhost:8080/article/queryByKeyWord",
+                    data: {
+                        keyWord: keyWord
+                    },
+                    async: false,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.articles.length == 0) {
+                            alert("根据该关键词没有找到相关的记录");
+                        } else {
+
+                            clearPages(20);
+
+                            var articles = data.articles;
+                            for (var i = 1; i <= articles.length; i++)
+                                drawArticle(i, articles[i - 1]);
+                        }
+                    }
+
+                });
+            });
+
+            //首页按钮
+            $("#firstPage").click(function() {
+                var url = "./index.html";
+                url = encodeURI(url);
+                window.location.href = url;
+            });
+
+
+            //我的文章
+            $("#myArticles").click(function() {
+                $.ajax({
+                    url: "http://localhost:8080/article/queryAllByUserId",
+                    data: {
+                        userId: userInformation.userId
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        clearPages(20);
+                        var articles = data.articles;
+                        for (var i = 1; i <= articles.length; i++) {
+                            articles[i - 1].nickName = userInformation.nickName;
+                            drawArticle(i, articles[i - 1]);
+                        }
+                    }
+                });
+            });
+
+
+            //我的收藏
+            $("#myCollections").click(function() {
+                $.ajax({
+                    url: "http://localhost:8080/collection/queryArticleCollectionByUserId",
+                    data: {
+                        userId: userInformation.userId
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        clearPages(20);
+                        var collections = data.collections;
+                        console.log(data);
+                        for (var i = 1; i <= collections.length; i++) {
+                            collections[i - 1].nickName = userInformation.nickName;
+                            drawArticle(i, collections[i - 1]);
+                        }
+                    }
+                });
+            });
+
+
+            //为跳转按钮绑定函数
+            $("#gotoPage_but").click(function() {
+                var gotoPage = $("#gotoPage_input").val();
+
+                if (0 < gotoPage && gotoPage <= pagesCount) {
+                    curPage = gotoPage;
+                    drawArticles(gotoPage, 20);
+                } else {
+                    alert("请输入正确的页码");
+                }
+            });
+
+
+            //退出登录
+            $("#quit_but").click(function() {
+                window.localStorage.clear();
+
+                var url = "./login.html";
+                url = encodeURI(url);
+                window.location.href = url;
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <ul class="left" style="height: 50px;width: 75%;">
+        <li><a id="firstPage" style="cursor:pointer;">论坛首页</a></li>
+        <li><a id="publish" style="cursor:pointer;">我要发帖</a></li>
+        <li><a id="myArticles" style="cursor:pointer;">我的贴子</a></li>
+        <li><a id="myCollections" style="cursor:pointer;">我的收藏</a></li>
+        <li><a href="./admin/login.html">管理员入口</a></li>
+        <li><a href="./connect.html">论坛帮助</a></li>
+        <input id="keyWord" type="text" placeholder="根据关键词搜索">
+        <button id="btn_search"><span>查找</span></button>
+    </ul>
+    <!-- 未登录时的导航栏 -->
+    <div id="unlogin" class="header" hidden="true">
+        <ul>
+            <span style="font-size: 16px;">欢迎您，请</span>
+            <li><a class="active" href="./login.html">登录</a></li>
+            <li><a href="./register.html">注册</a></li>
+        </ul>
+    </div>
+
+    <!-- 登陆后的导航栏 -->
+    <div id="login" class="header" hidden="true">
+        <ul>
+            <span id="userName" style="font-size: 16px;"></span>
+            <li>
+                <img id="userFace" src="http://localhost/images/1.jpg" style="cursor:pointer;" height="50" width="50"></img>
+            </li>
+            <li>
+                <button id="quit_but">退出登录</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="hh">
+    <img src="images/BBS.jpg" height="149" width="200">
+  </div> -->
+    <div class="left">
+        <table width="100%" cellpadding="0" cellspacing="5" class="table_list parent_forum ">
+            <colgroup>
+                <col width="300px">
+                <col width="40px">
+                <col width="40px">
+                <col width="100px">
+                <col width="60px">
+                <col width="100px">
+            </colgroup>
+            <tbody>
+                <tr class="zebra">
+                    <th>标题</th>
+                    <th class="tc">赞</th>
+                    <th class="tc">踩</th>
+                    <th class="tc">发布人</th>
+                    <th class="tc">热度</th>
+                    <th class="tc">发布时间</th>
+                </tr>
+
+                <tr id="article-area">
+
+                    <tr id="article1">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article2">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article3">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article4">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article5">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article6">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article7">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article8">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article9">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article10">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+
+                    <tr id="article11">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article12">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article13">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article14">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article15">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article16">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article17">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article18">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article19">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                    <tr id="article20">
+                        <td class="title">
+                            <a class="title_style_red title_style_bold"></a>
+                        </td>
+                        <td class="tc"></td>
+                        <td class="tc"></td>
+                        <td class="tc">
+                            <a style="cursor:pointer;"></a><br>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                    </tr>
+
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 页面跳转 -->
+        <nav aria-label="Page navigation" style="float: right;">
+            <ul id="pagenavigation" class="pagination">
+                <li>
+                    跳转至<input id="gotoPage_input" style="width: 40px;"></input>
+                    <button id="gotoPage_but">确定</button>
+                </li>
+                <li>
+                    <a id="prePage" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li><a id="page" style="cursor: pointer;">1</a></li>
+                <li>
+                    <a id="postPage" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+    <div class="right_up">
+        <span style="color: blue;margin-left: 120px;font-size: 20px;">广告</span>
+        <hr />
+    </div>
+    <div class="right_down">
+        <span style="color: blue;margin-left: 120px;font-size: 20px;">版面简介</span>
+        <hr />
+
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>bbs后台</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="./css/back_index.css" rel="stylesheet">
+    <link href="../css/index.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var pagesCount;
+            var curPage = 1;
+
+
+            drawArticles(1, 10);
+
+            //文章页码
+            $.ajax({
+                url: "http://localhost:8080/article/queryArticlesCount",
+                data: {},
+                async: true,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    articlesCount = data.articlesCount;
+                    pagesCount = articlesCount / 10 > parseInt(articlesCount / 10) ? parseInt(articlesCount / 10) + 1 : parseInt(articlesCount / 10);
+                    $("#page").html(curPage + "/" + pagesCount);
+                }
+            });
+
+
+            $("#prePage").click(function() {
+                if (curPage > 1) {
+                    curPage -= 1;
+                    drawArticles(curPage, 10);
+                    $("#page").html(curPage + "/" + pagesCount);
+                } else {
+                    alert("已经是第1页");
+                }
+            });
+
+
+            $("#postPage").click(function() {
+                if (curPage < pagesCount) {
+                    curPage += 1;
+                    drawArticles(curPage, 10);
+                    $("#page").html(curPage + "/" + pagesCount);
+                } else
+                    alert("已经是最后一页");
+            });
+
+            //请求并渲染指定页面的文章概要
+            function drawArticles(currentPage, pageSize) {
+
+                $.ajax({
+                    url: "http://localhost:8080/article/queryByCurrentPage",
+                    data: {
+                        currentPage: currentPage,
+                        pageSize: pageSize
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        clearPages(10);
+                        var articles = data.articles;
+                        for (var i = 1; i <= articles.length; i++)
+                            drawArticle(i, articles[i - 1]);
+
+                    }
+                });
+
+            }
+
+
+
+            //渲染指定文章的函数概要
+            function drawArticle(id, article) {
+                var tds = $("#article" + id).find("td");
+                $(tds[0]).html(article.title);
+                $(tds[1]).html(article.likesNum);
+                $(tds[2]).html(article.dislikesNum);
+                $(tds[3]).html(article.nickName);
+                $(tds[4]).html(article.articleId);
+                $(tds[5]).find("span").html(article.createTime.split("T")[0]);
+            }
+
+            //清空当前页面
+            function clearPages(pages) {
+                for (var id = 1; id <= pages; id++) {
+                    var tds = $("#article" + id).find("td");
+                    $(tds[0]).find("a").html("");
+                    $(tds[1]).html("");
+                    $(tds[2]).html("");
+                    $(tds[3]).find("a").html("");
+                    $(tds[4]).html("");
+                    $(tds[5]).find("span").html("");
+                }
+            }
+
+            //为搜索按钮绑定事件
+            $("#btn_search").click(function(event) {
+                var keyWord = $("#keyWord").val();
+                $.ajax({
+                    url: "http://localhost:8080/article/queryByKeyWord",
+                    data: {
+                        keyWord: keyWord
+                    },
+                    async: false,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.articles.length == 0) {
+                            alert("根据该关键词没有找到相关的记录");
+                        } else {
+
+                            for (var id = 1; id <= 10; id++) {
+                                var tds = $("#article" + id).find("td");
+                                $(tds[0]).find("a").html("");
+                                $(tds[1]).html("");
+                                $(tds[2]).html("");
+                                $(tds[3]).find("a").html("");
+                                $(tds[4]).html("");
+                                $(tds[5]).find("span").html("");
+                            }
+                            clearPages(10);
+
+                            var articles = data.articles;
+                            for (var i = 1; i <= articles.length; i++)
+                                drawArticle(i, articles[i - 1]);
+                        }
+                    }
+
+                });
+            });
+
+            //清空当前页面
+            function clearPages(pages) {
+                for (var id = 1; id <= pages; id++) {
+                    var tds = $("#article" + id).find("td");
+                    $(tds[0]).html("");
+                    $(tds[1]).html("");
+                    $(tds[2]).html("");
+                    $(tds[3]).html("");
+                    $(tds[4]).html("");
+                    $(tds[5]).find("span").html("");
+                }
+            }
+
+
+            //为跳转按钮绑定函数
+            $("#gotoPage_but").click(function() {
+                var gotoPage = $("#gotoPage_input").val();
+
+                if (0 < gotoPage && gotoPage <= pagesCount) {
+                    $("#page").html(gotoPage + "/" + pagesCount);
+                    curPage = gotoPage;
+                    drawArticles(gotoPage, 10);
+                } else {
+                    alert("请输入正确的页码");
+                }
+            });
+
+
+            //为修改标题按钮绑定事件
+            $("#btn_modify").click(function(event) {
+                var articleId = $("#article_Id").val();
+                var newTitle = $("#article_newtitle").val();
+                $.ajax({
+                    url: "http://localhost:8080/article/modifyTitle",
+                    data: {
+                        articleId: articleId,
+                        newTitle: newTitle
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+                            alert("修改成功");
+                            window.location.href = "./article.html"
+                        } else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+
+                });
+            });
+
+
+
+            //为删除文章按钮绑定事件
+            $("#btn_delete").click(function(event) {
+                var articleId = $("#article_delete").val();
+                $.ajax({
+                    url: "http://localhost:8080/article/removeByArticleId",
+                    data: {
+                        articleId: articleId
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.success) {
+                            alert("删除成功");
+                            window.location.href = "./article.html"
+                        } else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+
+                });
+            });
+
+
+
+        });
+    </script>
+</head>
+
+
+<body>
+    <div class="header">
+        <h2>BBS后台管理系统</h2>
+        <div class="index_header">
+            <p>
+                <span style="color: #fff21b"></span>
+            </p>
+            <a href="../login.html">退出</a>
+        </div>
+    </div>
+
+    <div class="left_body">
+        <nav>
+            <ul>
+                <li><a class="active">功能列表</a></li>
+                <li id="articleAdmin" class="li1"><a href="./article.html" style="background-color: #99CCFF;">帖子管理</a></li>
+                <li id="userAdmin" class="li2"><a href="./user.html" style="background-color: #99CCFFed;">用户管理</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="right_body" style="width: 100%">
+        <h2>作为管理员意味着拥有无限的权力，请您慎重每次操作！</h2>
+        <div class="left">
+            <ul>
+                根据关键字查询：
+                <input id="keyWord" type="text" placeholder="根据关键词搜索">
+                <button id="btn_search" style="background-color: greenyellow"><span>查找</span></button>
+            </ul>
+
+            <ul>
+                修改标题：
+                <input id="article_Id" type="text" placeholder="请输入待修改的文章ID">
+                <input id="article_newtitle" type="text" placeholder="请输入修改的新标题">
+                <button id="btn_modify"><span>修改</span></button>
+            </ul>
+
+            <ul>
+                根据ID删除文章：
+                <input id="article_delete" type="text" placeholder="请输入需要删除的文章ID">
+                <button id="btn_delete"><span>删除</span></button>
+            </ul>
+
+            <table width="100%" cellpadding="0" cellspacing="5" class="table_list parent_forum ">
+
+                <colgroup>
+                    <col width="300px">
+                    <col width="40px">
+                    <col width="40px">
+                    <col width="100px">
+                    <col width="60px">
+                    <col width="100px">
+                </colgroup>
+                <tbody>
+                    <tr class="zebra">
+                        <th>标题</th>
+                        <th class="tc">赞</th>
+                        <th class="tc">踩</th>
+                        <th class="tc">发布人</th>
+                        <th class="tc">id</th>
+                        <th class="tc">发布时间</th>
+                    </tr>
+
+                    <tr id="article-area">
+
+                        <tr id="article1">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article2">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article3">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article4">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article5">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article6">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article7">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article8">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article9">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                        <tr id="article10">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc">
+                                <span class="time"></span>
+                            </td>
+                        </tr>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- 页面跳转 -->
+            <nav aria-label="Page navigation">
+                <ul id="pagenavigation" class="pagination">
+                    <li style="list-style: none;">
+                        跳转至<input id="gotoPage_input" style="width: 40px;"></input>
+                        <button id="gotoPage_but" style="background-color: #fafafa">确定</button>
+                    </li>
+                    <li style="list-style: none;">
+                        <a id="prePage" aria-label="Previous" style="cursor: pointer;">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li style="list-style: none;"><a id="page">1</a></li>
+                    <li style="list-style: none;">
+                        <a id="postPage" aria-label="Next" style="cursor: pointer">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

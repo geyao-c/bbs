@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>登录</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            if (window.localStorage.getItem("userName") != null)
+                window.location.href = "./index.html";
+
+            //登陆处理函数
+            function loginFunction(event) {
+                var userName = $("#usernameInput").val();
+                var userPassword = $("#userPasswordInput").val();
+                if (userName === "" || userPassword === "") {
+                    alert("账号或密码不能为空");
+                } else {
+                    $.ajax({
+                        url: "http://localhost:8080/user/verifyLogin",
+                        data: {
+                            userName: userName,
+                            userPassword: userPassword
+                        },
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success) {
+
+                                window.localStorage.setItem("userName", userName);
+                                var url = "./index.html";
+                                url = encodeURI(url);
+                                window.location.href = url;
+                            } else {
+                                alert("密码错误");
+                            }
+                        }
+                    });
+                }
+            }
+
+
+            //为注册按钮绑定的事件
+            $("#but_register").click(function(event) {
+                window.location.href = "./register.html";
+            });
+
+
+            //为登录按钮绑定的事件
+            $("#but_login").click(loginFunction);
+
+
+            //实现点击enter 触发登录的函数
+            $(document).keypress(function(e) {
+                if (e.keyCode == 13) {
+                    loginFunction();
+                }
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="signupform">
+        <h1></h1>
+        <div class="container">
+
+            <div class="agile_info">
+
+                <div class="w3l_form">
+                    <div class="left_grid_info">
+                        <h3>华南理工BBS</h3>
+                    </div>
+                </div>
+
+                <div class="w3_info">
+                    <h2>登录</h2>
+                    <table>
+                        <div class="input-group">
+                            <input id="usernameInput" type="text" placeholder="用户名" required="required">
+                        </div>
+                        <div class="input-group">
+                            <input id="userPasswordInput" type="password" placeholder="密码" required="required">
+                        </div>
+
+                        <button id="but_login" class="btn btn-danger btn-block" type="submit">登录</button>
+                    </table>
+                    <button id="but_register" class="btn btn-danger2 btn-block">注册</button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

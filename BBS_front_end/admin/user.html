@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>bbs后台</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="./css/back_index.css" rel="stylesheet">
+    <link href="../css/index.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var usersCount;
+            var pagesCount;
+            var curPage = 1;
+
+
+            //文章页码
+            $.ajax({
+                url: "http://localhost:8080/user/queryUsersCount",
+                data: {},
+                async: false,
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    usersCount = data.usersCount;
+                    pagesCount = usersCount / 10 > parseInt(usersCount / 10) ? parseInt(usersCount / 10) + 1 : parseInt(usersCount / 10);
+                    $("#page").html(curPage + "/" + pagesCount);
+                }
+            });
+
+
+            accessUsers(1, 10);
+
+
+            //获取用户
+            function accessUsers(currentPage, pageSize) {
+
+                $.ajax({
+                    url: "http://localhost:8080/user/queryByCurrentPage",
+                    data: {
+                        currentPage: currentPage,
+                        pageSize: pageSize
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        drawUsers(data.users, data.users.length);
+                    }
+                });
+
+            }
+
+
+
+
+            //渲染指定用户的函数概要
+            function drawUsers(users, length) {
+                clearUsers(10);
+                for (var i = 0; i < length; i += 1) {
+                    var tds = $("#user" + (i + 1)).find("td");
+                    $(tds[0]).html(users[i].userId);
+                    $(tds[1]).html(users[i].nickName);
+                    $(tds[2]).html(users[i].userGender == 1 ? "男" : "女");
+                    $(tds[3]).html(users[i].userFans);
+                    $(tds[4]).html(users[i].userName);
+                    $(tds[5]).html(users[i].userPassword);
+                }
+            }
+
+            //清空函数
+            function clearUsers(length) {
+                for (var i = 1; i <= length; i += 1) {
+                    var tds = $("#user" + i).find("td");
+                    $(tds[0]).html("");
+                    $(tds[1]).html("");
+                    $(tds[2]).html("");
+                    $(tds[3]).html("");
+                    $(tds[4]).html("");
+                    $(tds[5]).html("");
+                }
+            }
+
+
+
+            //为搜索按钮绑定事件
+            $("#btn_search").click(function(event) {
+                var userId = $("#userId").val();
+                $.ajax({
+                    url: "http://localhost:8080/user/queryUserById",
+                    data: {
+                        userId: userId
+                    },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        if (data.user == null) {
+                            alert("根据该关键词没有找到相关的记录");
+                        } else {
+                            clearUsers(10);
+                            var users = [];
+                            users[0] = data.user;
+                            drawUsers(users, 1);
+                        }
+                    }
+
+                });
+            });
+
+
+            //前一页
+            $("#prePage").click(function() {
+                if (curPage > 1) {
+                    curPage -= 1;
+                    accessUsers(curPage, 10);
+                    $("#page").html(curPage + "/" + pagesCount);
+                } else {
+                    alert("已经是第1页");
+                }
+            });
+
+
+            //后一页
+            $("#postPage").click(function() {
+                if (curPage < pagesCount) {
+                    curPage += 1;
+                    accessUsers(curPage, 10);
+                    $("#page").html(curPage + "/" + pagesCount);
+                } else
+                    alert("已经是最后一页");
+            });
+
+
+            //为跳转按钮绑定函数
+            $("#gotoPage_but").click(function() {
+                var gotoPage = parseInt($("#gotoPage_input").val());
+                if (0 < gotoPage && gotoPage <= pagesCount) {
+                    $("#page").html(gotoPage + "/" + pagesCount);
+                    curPage = gotoPage;
+                    accessUsers(gotoPage, 10);
+                } else {
+                    alert("请输入正确的页码");
+                }
+            });
+
+
+
+            $("#btn_delete").click(function(event) {
+                var userId = $("#user_id").val();
+                $.ajax({
+                    url: "http://localhost:8080/user/removeUserById",
+                    data: {
+                        userId: userId
+                    },
+                    type: "POST",
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        if (data.success) {
+                            alert("删除成功");
+                        } else {
+                            alert("出错啦！请稍后再试.");
+                        }
+                    }
+
+                });
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="header">
+        <h2>BBS后台管理系统</h2>
+        <div class="index_header">
+            <p>
+                <span style="color: #fff21b"></span>
+            </p>
+            <a href="../login.html">退出</a>
+        </div>
+    </div>
+
+
+    <div class="left_body">
+        <nav>
+            <ul>
+                <li><a class="active">功能列表</a></li>
+                <li id="articleAdmin" class="li1"><a href="./article.html" style="background-color: #99CCFF;">帖子管理</a></li>
+                <li id="userAdmin" class="li2"><a href="./user.html" style="background-color: #99CCFFed;">用户管理</a></li>
+
+            </ul>
+        </nav>
+    </div>
+
+
+
+    <div class="right_body" style="width: 100%">
+        <h2>作为管理员意味着拥有无限的权力，请您慎重每次操作！</h2>
+        <div class="left">
+            <ul>
+                <input id="userId" type="text" placeholder="根据用户ID搜索">
+                <button id="btn_search" style="background-color: greenyellow"><span>查找</span></button>
+            </ul>
+
+            <ul>
+                <input id="user_id" type="text" placeholder="请输入待删除的用户ID">
+                <button id="btn_delete"><span>删除</span></button>
+            </ul>
+
+            <table width="100%" cellpadding="0" cellspacing="5" class="table_list parent_forum ">
+
+                <colgroup>
+                    <col width="40px">
+                    <col width="200px">
+                    <col width="40px">
+                    <col width="100px">
+                    <col width="300px">
+                    <col width="300px">
+                </colgroup>
+                <tbody>
+                    <tr class="zebra">
+                        <th>id</th>
+                        <th class="tc">昵称</th>
+                        <th class="tc">性别</th>
+                        <th class="tc">粉丝数</th>
+                        <th class="tc">账号</th>
+                        <th class="tc">密码</th>
+                    </tr>
+
+                    <tr id="user-area">
+
+                        <tr id="user1">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user2">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user3">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user4">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user5">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user6">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user7">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user8">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user9">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                        <tr id="user10">
+                            <td class="title"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                            <td class="tc"></td>
+                        </tr>
+
+                    </tr>
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation">
+                <ul id="pagenavigation" class="pagination">
+                    <li style="list-style: none;">
+                        跳转至<input id="gotoPage_input" style="width: 40px;"></input>
+                        <button id="gotoPage_but" style="background-color: #fafafa">确定</button>
+                    </li>
+                    <li style="list-style: none;">
+                        <a id="prePage" aria-label="Previous" style="cursor: pointer">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li style="list-style: none;"><a id="page">1</a></li>
+                    <li style="list-style: none;">
+                        <a id="postPage" aria-label="Next" style="cursor: pointer">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</body>
+
+</html>

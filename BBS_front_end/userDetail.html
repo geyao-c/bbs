@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>用户信息界面</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link href="./css/detail.css" rel="stylesheet">
+    <script>
+        $(document).ready(function() {
+
+            var userName = window.localStorage.getItem("userName");
+            $.ajax({
+                url: "http://localhost:8080/user/queryUserByUserName",
+                data: {
+                    userName: userName
+                },
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    if (data.user.userGender == 0) {
+                        $("#userGender").html("女");
+                    } else {
+                        $("#userGender").html("男");
+                    }
+                    $("#userSelfinfo").html(data.user.userSelfinfo);
+                    $("#userFace").attr("src", data.user.userFace);
+                    $("#userFans").html(data.user.userFans);
+                    $("#userNickName").html(data.user.nickName);
+
+                }
+            });
+
+            $("#edit").click(function() {
+                var url = "./editUserDetail.html";
+                url = encodeURI(url);
+                window.location.href = url;
+            });
+
+            $("#back").click(function() {
+                var url = "./index.html";
+                url = encodeURI(url);
+                window.location.href = url;
+
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <div class="signupform">
+        <h1></h1>
+        <div class="container">
+
+            <div class="agile_info">
+
+                <div class="w3l_form">
+                    <div class="left_grid_info">
+                        <h3>头像</h3>
+                        <div>
+                            <img id="userFace" src="" height="230" width="50"></img>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w3_info">
+                    <h2>个人信息</h2>
+                    <P>
+                    </P>
+                    性别:
+                    <p id="userGender"></p>
+                    自我介绍:
+                    <p id="userSelfinfo"></p>
+                    关注数:
+                    <p id="userFans"></p>
+                    昵称:
+                    <p id="userNickName"></p>
+                    <button id="edit" class="btn btn-danger btn-block" type="submit">修改信息</button>
+                    <button id="back" class="btn btn-danger2 btn-block" type="submit">返回</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

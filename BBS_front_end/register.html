@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>注册</title>
+    <meta charset="utf-8">
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            //注册处理函数
+            function registFunction() {
+                var userName = $("#userNameInput").val();
+                var userPassword1 = $("#userPasswordInput1").val();
+                var userPassword2 = $("#userPasswordInput2").val();
+                if (userName === "" || userPassword1 === "" || userPassword2 === "") {
+                    alert("账号或密码不能为空");
+                } else if (userPassword1.length < 6) {
+                    alert("密码长度小于6");
+                } else if (userPassword1 != userPassword2) {
+                    alert("两次输入的密码不相同,请重新输入.");
+                } else {
+                    $.ajax({
+                        url: "http://localhost:8080/user/addUser",
+                        data: {
+                            userName: userName,
+                            userPassword: userPassword1
+                        },
+                        type: "POST",
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.status == 0) {
+                                alert("注册成功");
+                                window.localStorage.setItem("userName", userName);
+                                var url = "./index.html";
+                                url = encodeURI(url);
+                                window.location.href = url;
+                            } else if (data.status == 1) {
+                                alert("该用户名已存在");
+                            } else {
+                                alert("服务器异常，请稍后再试。");
+                            }
+                        }
+                    });
+                }
+            }
+
+            //绑定注册按钮事件
+            $("#but_register").click(registFunction);
+
+            $(document).keypress(function(e) {
+                if (e.keyCode == 13) {
+                    registFunction();
+                }
+            });
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="signupform">
+        <h1></h1>
+        <div class="container">
+
+            <div class="agile_info">
+                <div class="w3l_form">
+                    <div class="left_grid_info">
+                        <h3>注册须知：</h3>
+
+                        <p>用户名和密码均不能为空，且密码长度不能低于6位</p>
+                        <p>请保留用户名和密码，以便日后的登录</p>
+
+                    </div>
+                </div>
+                <div class="w3_info">
+                    <h2 style="text-align: center">注册</h2>
+                    <table>
+                        <div class="input-group">
+                            <input id="userNameInput" type="text" placeholder="用户名" required="required">
+                        </div>
+
+                        <div class="input-group">
+                            <input id="userPasswordInput1" type="password" placeholder="输入密码" required="required">
+                        </div>
+
+                        <div class="input-group">
+                            <input id="userPasswordInput2" type="password" placeholder="确认密码" required="required">
+                        </div>
+
+                        <button id="but_register" class="btn btn-danger btn-block" type="submit">注册</button>
+                    </table>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+        </div>
+        <div class="footer">
+
+            <p>
+                <a target="_blank"></a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

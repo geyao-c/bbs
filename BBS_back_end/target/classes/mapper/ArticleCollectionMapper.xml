@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnu.bbs.dao.ArticleCollectionMapper">
+  <resultMap id="BaseResultMap" type="com.hnu.bbs.entity.ArticleCollection">
+    <id column="collection_id" jdbcType="INTEGER" property="collectionId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+  </resultMap>
+
+<!--  Boolean insert(ArticleCollection articleCollection);-->
+  <insert id="insert" parameterType="com.hnu.bbs.entity.ArticleCollection">
+    insert into articleCollection (user_id, article_id
+      )
+    values (#{userId,jdbcType=INTEGER}, #{articleId,jdbcType=INTEGER}
+      )
+  </insert>
+
+<!--  Boolean deleteByCollectionId(int collectionId);-->
+  <delete id="deleteByCollectionId" parameterType="java.lang.Integer">
+    delete from articleCollection
+    where collection_id=#{collectionId,jdbcType=INTEGER}
+  </delete>
+
+<!--   List<int> selectByUserId(int userId);-->
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select article_id
+    from articleCollection
+    where user_id=#{userId,jdbcType=INTEGER}
+  </select>
+
+<!--  List<Integer> selectAll();-->
+  <select id="selectAll" resultType="java.lang.Integer">
+    select article_id
+    from articleCollection
+  </select>
+
+<!--  int deleteByArticleCollection(ArticleCollection articleCollection);-->
+  <delete id="deleteByArticleCollection" parameterType="com.hnu.bbs.entity.ArticleCollection" >
+    delete from articleCollection
+    where user_id=#{userId,jdbcType=INTEGER} and article_id=#{articleId,jdbcType=INTEGER}
+  </delete>
+
+
+</mapper>

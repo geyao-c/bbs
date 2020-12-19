@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnu.bbs.dao.ArticleMapper">
+
+  <resultMap id="BaseResultMap" type="com.hnu.bbs.entity.Article">
+    <result column="article_id" jdbcType="INTEGER" property="articleId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="content" jdbcType="VARCHAR" property="content"/>
+    <result column="create_time" jdbcType="DATE" property="createTime" />
+    <result column="likes_num" jdbcType="INTEGER" property="likesNum" />
+    <result column="dislikes_num" jdbcType="INTEGER" property="dislikesNum" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+  </resultMap>
+
+    <parameterMap id="map" type="java.util.Map">
+        <parameter property="currIndex" jdbcType="INTEGER"/>
+        <parameter property="pageSize" jdbcType="INTEGER"/>
+    </parameterMap>
+
+<!--  int insert(Article article);-->
+  <insert id="insert" parameterType="com.hnu.bbs.entity.Article">
+    insert into article (user_id, create_time,
+      likes_num, dislikes_num, title,
+      content)
+    values (#{userId,jdbcType=INTEGER}, #{createTime,jdbcType=DATE},
+      #{likesNum,jdbcType=INTEGER}, #{dislikesNum,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+      #{content,jdbcType=VARCHAR})
+  </insert>
+
+
+<!--    Article selectByArticleId(Integer articleId);-->
+    <select id="selectByArticleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select *
+        from article
+        where article_id=#{articleId,jdbcType=INTEGER}
+    </select>
+
+
+<!--  List<Article> selectAllByUserId(Integer userId);-->
+  <select id="selectAllByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select  *
+    from article
+    where user_id=#{userId,jdbcType=INTEGER}
+    order by article_id desc
+  </select>
+
+
+<!--  List<Article> selectAll();-->
+<select id="selectAll" resultMap="BaseResultMap">
+  select *
+  from article
+  order by article_id desc
+</select>
+
+
+<!--  int deleteByArticleId(Integer articleId);-->
+  <delete id="deleteByArticleId" parameterType="java.lang.Integer">
+    delete from article
+    where article_id=#{articleId,jdbcType=INTEGER}
+  </delete>
+
+
+<!--  int updateContent(Article article);-->
+  <update id="updateContent" parameterType="com.hnu.bbs.entity.Article">
+    update article set
+    content=#{content,jdbcType=VARCHAR}
+    where article_id=#{articleId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateLikesNum(Article article);-->
+  <update id="updateLikesNum" parameterType="com.hnu.bbs.entity.Article">
+    update article set
+    likes_num=#{likesNum,jdbcType=INTEGER}
+    where article_id=#{articleId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateDisLikesNum(Article article);-->
+  <update id="updateDisLikesNum" parameterType="com.hnu.bbs.entity.Article">
+    update article set
+    dislikes_num=#{dislikesNum,jdbcType=INTEGER}
+    where article_id=#{articleId,jdbcType=INTEGER}
+  </update>
+
+
+<!--  int updateTitle(Article article);-->
+  <update id="updateTitle" parameterType="com.hnu.bbs.entity.Article">
+    update article set
+    title=#{title,jdbcType=VARCHAR}
+    where article_id=#{articleId,jdbcType=INTEGER}
+  </update>
+
+
+<!--    List<Article> selectByCurrentPage(Map<String,Object> data);-->
+
+    <select id="selectByCurrentPage" parameterMap="map" resultMap="BaseResultMap">
+        select *
+        from article
+        order by article_id desc
+        limit #{currIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+    </select>
+
+
+<!--    Integer selectCountOfAll();-->
+    <select id="selectCountOfAll" resultType="java.lang.Integer">
+        select count(*)
+        from article
+    </select>
+
+<!--    List<Article> selectByKeyWord(String keyWord);-->
+    <select id="selectByKeyWord" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select *
+        from article
+        where title like "%"#{keyWord,jdbcType=VARCHAR}"%"
+        order by article_id desc
+    </select>
+
+
+</mapper>
