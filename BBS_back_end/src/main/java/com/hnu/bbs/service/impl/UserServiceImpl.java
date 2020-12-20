@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUserName(userName);
         user.setUserPassword(userPassword);
-        user.setUserFace("http://207.148.112.5/images/1.jpg");
+        user.setUserFace("E:/logo.png");
         user.setUserGender(0);
         user.setNickName("未命名");
         user.setUserFans(0);

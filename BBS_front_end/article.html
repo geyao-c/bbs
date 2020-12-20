@@ -43,7 +43,6 @@
                     var converter = new showdown.Converter();
                     var html = converter.makeHtml(data.article.content);
                     document.getElementById("show-area").innerHTML = html;
-
                 },
                 error: function(data) {
                     alert("网络出现故障");
